@@ -1,19 +1,28 @@
-.container {
-    display: inline-block;
-    padding-bottom: 30px;
-    width: 50%;
-}
+/* csak hogy ne legyen görgetősáv a body miatt */
+html, body { height: 99%; margin: 0; }
 
-.row {
-    display: flex;
-    width: 100%;
+.container {
+    margin-left: auto;
+    margin-right: auto;  /* vízszintes közép */
+
+
+    /* állítsd be JS-ből is lehet, lásd lent */
+    --n: 8;
+    --size: calc(80dvh / var(--n));   /* cella oldala = 100% magasság / sorok száma */
+
+    display: grid;
+    height: 100dvh;                    /* TELJES képernyőmagasság */
+    width: calc(var(--n) * var(--size));/* szélesség = N * cellaméret => négyzet konténer */
+    grid-template-columns: repeat(var(--n), var(--size));
+    grid-template-rows: repeat(var(--n), var(--size));
+    /* fontos: ne használj gap-et, mert akkor nem tölti ki pontosan a 100dvh-t */
+    /* ha kell szegély: inkább .cell-re tegyél belső jelölést */
 }
 
 .cell {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    /*margin: 1px;*/
-
-    text-align: center;
-    background-color: red;
+    display: grid;
+    place-items: center;
+    background: red;      /* demo */
+    /* opcionális: határvonal vizualizáláshoz */
+    /* outline: 1px solid #111; */
 }

@@ -105,4 +105,15 @@ export default class Maze{
             B.left = false;
         }
     }
+
+    toHtml(){
+        let output = "";
+        for(let i = 0; i < this.size; i++){
+            for(let j = 0; j < this.size; j++) {
+                output += this.getCellByXY(j, i).toHtml();
+            }
+        }
+
+        return output;
+    }
 }

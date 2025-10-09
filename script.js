@@ -25,43 +25,37 @@ function cropPos(cell){
 function clickTest() {
     console.log("clicked");
 
-    let maze = new Maze(40);
-
-    // const grid = document.querySelector("#tableContainer");
-    // for(let i = 0; i < maze.size; i++){
-    //
-    // }
-    // // ha máshány sor kell!!!!: grid.style.setProperty('--rows', 8); !!!!!!!!!!
-
+    let maze = new Maze(20);
     seed(11);
 
+    const grid = document.querySelector("#tableContainer");
+    grid.style.setProperty('--n', 20);
+
+
     const id = setInterval(() => {
-        draw(maze);
+        draw(grid, maze);
         const done = maze.generateMazeStep();
         if (done === true) clearInterval(id);
     }, 10);
 
-    // let result = !maze.generateMazeStep();
-    // while (result){
-    //    result = !maze.generateMazeStep();
-    // }
-
-    draw(maze)
+    draw(grid, maze)
 }
 
-function draw(maze) {
-    let MytableContainer = document.getElementById("tableContainer");
+function draw(grid, maze) {
+    // let MytableContainer = document.getElementById("tableContainer");
+    //
+    // MytableContainer.innerHTML = '';
+    // let output = "";
+    // for(let i = 0; i < maze.size; i++) {
+    //     let row = `<div class="row">`;
+    //     for (let j = 0; j < maze.size; j++) {
+    //         row += maze.getCellByXY(j, i).toHtml();
+    //     }
+    //     row += "</div>";
+    //     output += row;
+    // }
+    //
+    // MytableContainer.innerHTML = output;
 
-    MytableContainer.innerHTML = '';
-    let output = "";
-    for(let i = 0; i < maze.size; i++) {
-        let row = `<div class="row">`;
-        for (let j = 0; j < maze.size; j++) {
-            row += maze.getCellByXY(j, i).toHtml();
-        }
-        row += "</div>";
-        output += row;
-    }
-
-    MytableContainer.innerHTML = output;
+    grid.innerHTML = maze.toHtml();
 }

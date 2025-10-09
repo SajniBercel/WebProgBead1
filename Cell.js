@@ -23,6 +23,7 @@ export class Cell{
         let border = "";
 
         border += "border-style: solid;";
+        border += "border-width: 2px;";
 
 
         border += "border-right-color:" + (this.right ? "black;" : "red;");
@@ -31,10 +32,5 @@ export class Cell{
         border += "border-top-color:" + (this.up ? "black;" : "red;");
 
         return `<div class="cell" style="${border + this.background}"></div>`;
-    }
-
-    // FOR DEBUGING
-    toString(){
-        return
     }
 }
