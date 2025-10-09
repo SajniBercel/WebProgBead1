@@ -11,7 +11,7 @@ export class Position{
         return [
             new Position(this.x - 1, this.y),
             new Position(this.x + 1, this.y),
-            new Position(this.x, this.y + 1),
+            new Position(this.x, this.y - 1),
             new Position(this.x, this.y + 1)
         ];
     }

@@ -25,8 +25,13 @@ function cropPos(cell){
 function clickTest() {
     console.log("clicked");
 
-    let mazeSize = 10;
-    let maze = new Maze(10);
+    let maze = new Maze(40);
+
+    // const grid = document.querySelector("#tableContainer");
+    // for(let i = 0; i < maze.size; i++){
+    //
+    // }
+    // // ha máshány sor kell!!!!: grid.style.setProperty('--rows', 8); !!!!!!!!!!
 
     seed(11);
 
@@ -34,7 +39,12 @@ function clickTest() {
         draw(maze);
         const done = maze.generateMazeStep();
         if (done === true) clearInterval(id);
-    }, 200);
+    }, 10);
+
+    // let result = !maze.generateMazeStep();
+    // while (result){
+    //    result = !maze.generateMazeStep();
+    // }
 
     draw(maze)
 }

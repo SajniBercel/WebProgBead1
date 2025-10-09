@@ -1,6 +1,7 @@
 import { Position } from "./Position.js"
 
 export class Cell{
+    visited = false;
     pos;
 
     // WALLS
@@ -9,7 +10,6 @@ export class Cell{
     left = true;
     right = true;
 
-    visited = false;
 
     background;
 
