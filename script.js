@@ -1,35 +1,44 @@
-import { seed, rand } from "./sbRandom.js";
-import Maze from "./Maze.js";
+import { seed } from "./sbRandom.js";
+import { Maze } from "./Maze.js";
 
-// TODO tesztelni kell MINDENT
-//document.addEventListener("DOMContentLoaded", generateMap)
-document.addEventListener("click", clickTest)
+startButton.addEventListener("click", clickTest)
+document.addEventListener("keydown", keyEventHandler)
 
-function cropPos(cell){
-    /*
-    let pos = cell.pos.getNeighbors();
-    let neighbors = [];
+/** @type {Maze | null} */
+let maze = null;
 
-    for(let i = 0; i < pos.length; i++) {
-        if(pos[i].x < 0 || pos[i].x >= maze[0].length || pos[i].y < 0 || pos[i].y >= Maze.length){
+/** html obj that will contain the maze */
+const grid = document.querySelector("#tableContainer");
 
-        } else {
-            neighbors.push(pos[i]);
-        }
+function keyEventHandler(e){
+    if (maze === null){
+        return;
     }
 
-    return neighbors;
-    */
+    if (e.code === "KeyW"){
+        maze.movePlayerUp()
+    } else if (e.code === "KeyS"){
+        maze.movePlayerDown()
+    } else if (e.code === "KeyA"){
+        maze.movePlayerLeft()
+    } else if (e.code === "KeyD"){
+        maze.movePlayerRight()
+    }
+
+    draw(grid, maze);
 }
 
 function clickTest() {
     console.log("clicked");
 
-    let maze = new Maze(20);
+    let numberOfRows = Number(document.querySelector("#numberOfRowsAndCols").value);
+    console.log(numberOfRows);
+
+    maze  = new Maze(numberOfRows);
     seed(11);
 
-    const grid = document.querySelector("#tableContainer");
-    grid.style.setProperty('--n', 20);
+
+    grid.style.setProperty('--n', numberOfRows);
 
 
     const id = setInterval(() => {
@@ -38,24 +47,14 @@ function clickTest() {
         if (done === true) clearInterval(id);
     }, 10);
 
+
+    console.time("MazeGen");
+    //maze.generateMaze(maze);
+    console.timeEnd("MazeGen");
+
     draw(grid, maze)
 }
 
 function draw(grid, maze) {
-    // let MytableContainer = document.getElementById("tableContainer");
-    //
-    // MytableContainer.innerHTML = '';
-    // let output = "";
-    // for(let i = 0; i < maze.size; i++) {
-    //     let row = `<div class="row">`;
-    //     for (let j = 0; j < maze.size; j++) {
-    //         row += maze.getCellByXY(j, i).toHtml();
-    //     }
-    //     row += "</div>";
-    //     output += row;
-    // }
-    //
-    // MytableContainer.innerHTML = output;
-
     grid.innerHTML = maze.toHtml();
 }

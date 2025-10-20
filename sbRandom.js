@@ -1,7 +1,7 @@
 let s = 1;
 
 export function seed(x) {
-    s = (x >>> 0) || 1;
+    s = x || 1;
 }
 
 // random number

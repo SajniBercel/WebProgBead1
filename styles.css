@@ -20,9 +20,9 @@ html, body { height: 99%; margin: 0; }
 }
 
 .cell {
+    border-style: solid;
+    border-width: 2px;
     display: grid;
     place-items: center;
-    background: red;      /* demo */
-    /* opcionális: határvonal vizualizáláshoz */
-    /* outline: 1px solid #111; */
+    background: Red;
 }

@@ -1,16 +1,33 @@
 import { rand } from "./sbRandom.js";
-import {Cell} from "./Cell.js";
+import { Cell } from "./Cell.js";
+import { Position } from "./Position.js";
+import { Player } from "./Player.js";
 
-export default class Maze{
-    // 2d array of cells
+export class Maze{
+    /** @type {[Cell[]]} */
     #mazeMap = [];
-    #currentCell;
-    #cellStack = [];
 
+    /**
+     * N*N (size = n)
+     * @type {number} */
     size;
 
+    /** @type {Player} */
+    #player;
+
+    /** @type {Position} */
+    #endPos
+
+    /**
+     * @param {number} n
+     */
     constructor (n) {
+        console.log("maze start");
         this.size = n;
+        const mid = Math.floor(n / 2);
+
+        this.#player = new Player(new Position(0, mid));
+        this.#endPos = new Position(this.size-1, mid);
 
         for (let i = 0; i < n; i++) {
             let row = [];
@@ -20,13 +37,18 @@ export default class Maze{
             this.#mazeMap.push(row);
         }
 
-        this.#currentCell = this.#mazeMap[this.size/2][0];
-        this.#currentCell.visible = true;
-        this.#cellStack = [this.#currentCell]
-        console.log(this.#mazeMap);
+        this.#currentCell = this.#mazeMap[mid][0];
+        this.#currentCell.visited = true;
+        this.#cellStack = [this.#currentCell];
+        this.getCellByPos(this.#player.pos).background = "background: green;"
+        this.#mazeMap[this.#endPos.y][this.#endPos.x].background = "background: blue;";
     }
 
-    // TODO
+    /**
+     * @param {number} X
+     * @param {number} Y
+     * @returns {Cell|null} Cell if the given X, Y position  is valid otherwise null
+     */
     getCellByXY(X, Y){
         if((X < this.size && Y < this.size) && (X >= 0 && Y >= 0)) {
             return this.#mazeMap[Y][X];
@@ -35,11 +57,70 @@ export default class Maze{
         return null;
     }
 
+    /**
+     * @param {Position} pos
+     * @returns {Cell|null} Cell if the given pos is valid otherwise null
+     */
     getCellByPos(pos){
         return this.getCellByXY(pos.x, pos.y);
     }
 
-    // returns true when done, otherwise false
+    movePlayerUp(){
+        let cell = this.getCellByPos(this.#player.pos);
+
+        if(!cell.upWall) {
+            cell.background = "";
+            this.#player.moveUp()
+            this.getCellByPos(this.#player.pos).background = "background: Green;"
+        }
+    }
+
+    movePlayerDown(){
+        let cell = this.getCellByPos(this.#player.pos);
+
+        if(!cell.downWall) {
+            cell.background = "";
+            this.#player.moveDown()
+            this.getCellByPos(this.#player.pos).background = "background: Green;"
+        }
+    }
+
+    movePlayerLeft(){
+        let cell = this.getCellByPos(this.#player.pos);
+
+        if(!cell.leftWall) {
+            cell.background = "";
+            this.#player.moveLeft()
+            this.getCellByPos(this.#player.pos).background = "background: Green;"
+        }
+    }
+
+    movePlayerRight(){
+        let cell = this.getCellByPos(this.#player.pos);
+        if(!cell.rightWall) {
+            cell.background = "";
+            this.#player.moveRight()
+            this.getCellByPos(this.#player.pos).background = "background: Green;"
+        }
+    }
+
+    /** @type {Cell} */
+    #currentCell;
+
+    /** @type {Cell[]} */
+    #cellStack = [];
+
+    /**
+     * generates maze with "generateMazeStep()" with while
+     * @returns {void}
+     */
+    generateMaze(){
+        while (!this.generateMazeStep()){}
+    }
+
+    /**
+     * @returns {boolean} returns true when done, otherwise false
+     */
     generateMazeStep () {
         if(this.#cellStack.length === 0){
             return true;
@@ -60,7 +141,6 @@ export default class Maze{
             this.removeWall(this.#currentCell, nextCell);
             this.#currentCell = nextCell;
         } else {
-            console.log("backing")
             this.#cellStack.pop()
             this.#currentCell = this.#cellStack[this.#cellStack.length - 1];
         }
@@ -76,37 +156,39 @@ export default class Maze{
             this.#currentCell.background = "background: green;";
         }
 
+        this.getCellByPos(this.#player.pos).background = "background: green;"
+        this.getCellByPos(this.#endPos).background = "background: blue;"
+
         return false;
     }
 
-    // TODO
+    /**
+     * @param {Cell} A
+     * @param {Cell} B
+     */
     removeWall(A, B){
-        // TODO pos.equals
-        /*
-        if(!(A.pos.getNeighbors().includes(B.pos))){
-            console.log("NEM SZOMSZÉDOS A 2 CELL")
-            return;
-        }
-        */
-
         if (A.pos.y > B.pos.y){
-            A.up = false;
-            B.down = false;
+            A.upWall = false;
+            B.downWall = false;
         } else if (A.pos.y < B.pos.y) {
-            A.down = false;
-            B.up = false;
+            A.downWall = false;
+            B.upWall = false;
         }
 
         if (A.pos.x > B.pos.x){
-            A.left = false;
-            B.right = false;
+            A.leftWall = false;
+            B.rightWall = false;
         } else if (A.pos.x < B.pos.x) {
-            A.right = false;
-            B.left = false;
+            A.rightWall = false;
+            B.leftWall = false;
         }
     }
 
+    /**
+     * @returns {string} String that contains the Maze as html tags
+     */
     toHtml(){
+        console.log("maze.toHtml");
         let output = "";
         for(let i = 0; i < this.size; i++){
             for(let j = 0; j < this.size; j++) {

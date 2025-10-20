@@ -1,5 +1,7 @@
 export class Position{
+    /** @type {number} */
     x = -1;
+    /** @type {number} */
     y = -1;
 
     constructor(x, y){
@@ -7,6 +9,10 @@ export class Position{
         this.y = y;
     }
 
+    /**
+     * Positions around the cell
+     * @returns {Position[]}
+     */
     getNeighbors(){
         return [
             new Position(this.x - 1, this.y),
