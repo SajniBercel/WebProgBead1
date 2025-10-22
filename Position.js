@@ -10,7 +10,7 @@ export class Position{
     }
 
     /**
-     * Positions around the cell
+     * Positions around the cell (not contains the cells pos)
      * @returns {Position[]}
      */
     getNeighbors(){
@@ -20,5 +20,13 @@ export class Position{
             new Position(this.x, this.y - 1),
             new Position(this.x, this.y + 1)
         ];
+    }
+
+    /**
+     * @param {Position} pos
+     * @returns {boolean} value based "=="
+     */
+    equals(pos){
+        return pos.x === this.x && pos.y === this.y;
     }
 }

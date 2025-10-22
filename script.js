@@ -1,7 +1,11 @@
 import { seed } from "./sbRandom.js";
 import { Maze } from "./Maze.js";
+import { Game } from "./Game.js";
+import { PathFinder } from "./PathFinder.js";
+import {Position} from "./Position.js";
 
-startButton.addEventListener("click", clickTest)
+startButton.addEventListener("click", startClick)
+showPathButton.addEventListener("click", showPath)
 document.addEventListener("keydown", keyEventHandler)
 
 /** @type {Maze | null} */
@@ -15,44 +19,60 @@ function keyEventHandler(e){
         return;
     }
 
+    let game = new Game(maze);
+
     if (e.code === "KeyW"){
-        maze.movePlayerUp()
+        game.movePlayerUp()
     } else if (e.code === "KeyS"){
-        maze.movePlayerDown()
+        game.movePlayerDown()
     } else if (e.code === "KeyA"){
-        maze.movePlayerLeft()
+        game.movePlayerLeft()
     } else if (e.code === "KeyD"){
-        maze.movePlayerRight()
+        game.movePlayerRight()
     }
 
-    draw(grid, maze);
+    if (!game.checkWin()){
+        draw(grid, game);
+    } else {
+        console.log("\nJáték vége\n");
+    }
 }
 
-function clickTest() {
+
+function showPath(){
+    let pathFinder = new PathFinder(maze);
+
+    pathFinder.generatePath()
+
+    console.log(pathFinder);
+
+    draw(grid, pathFinder);
+}
+
+
+function startClick() {
     console.log("clicked");
 
     let numberOfRows = Number(document.querySelector("#numberOfRowsAndCols").value);
     console.log(numberOfRows);
 
     maze  = new Maze(numberOfRows);
-    seed(11);
+    seed(7);
 
 
     grid.style.setProperty('--n', numberOfRows);
 
-
-    const id = setInterval(() => {
-        draw(grid, maze);
-        const done = maze.generateMazeStep();
-        if (done === true) clearInterval(id);
-    }, 10);
-
+    // const id = setInterval(() => {
+    //     draw(grid, maze);
+    //     const done = maze.generateMazeStep();
+    //     if (done === true) clearInterval(id);
+    // }, 10);
 
     console.time("MazeGen");
-    //maze.generateMaze(maze);
+    maze.generateMaze(maze);
     console.timeEnd("MazeGen");
 
-    draw(grid, maze)
+    draw(grid, maze);
 }
 
 function draw(grid, maze) {

@@ -12,22 +12,26 @@ export class Maze{
      * @type {number} */
     size;
 
-    /** @type {Player} */
-    #player;
+    /** @type {Position} */
+    startPos;
 
     /** @type {Position} */
-    #endPos
+    endPos;
 
-    /**
-     * @param {number} n
-     */
+    /** @type {Cell} */
+    #currentCell;
+
+    /** @type {Cell[]} */
+    #cellStack = [];
+
+    /** @param {number} n */
     constructor (n) {
         console.log("maze start");
-        this.size = n;
-        const mid = Math.floor(n / 2);
 
-        this.#player = new Player(new Position(0, mid));
-        this.#endPos = new Position(this.size-1, mid);
+        const mid = Math.floor(n / 2);
+        this.size = n;
+        this.endPos = new Position(this.size-1, mid);
+        this.startPos = new Position(0, mid);
 
         for (let i = 0; i < n; i++) {
             let row = [];
@@ -40,8 +44,7 @@ export class Maze{
         this.#currentCell = this.#mazeMap[mid][0];
         this.#currentCell.visited = true;
         this.#cellStack = [this.#currentCell];
-        this.getCellByPos(this.#player.pos).background = "background: green;"
-        this.#mazeMap[this.#endPos.y][this.#endPos.x].background = "background: blue;";
+        this.#mazeMap[this.endPos.y][this.endPos.x].background = "background: blue;";
     }
 
     /**
@@ -64,51 +67,6 @@ export class Maze{
     getCellByPos(pos){
         return this.getCellByXY(pos.x, pos.y);
     }
-
-    movePlayerUp(){
-        let cell = this.getCellByPos(this.#player.pos);
-
-        if(!cell.upWall) {
-            cell.background = "";
-            this.#player.moveUp()
-            this.getCellByPos(this.#player.pos).background = "background: Green;"
-        }
-    }
-
-    movePlayerDown(){
-        let cell = this.getCellByPos(this.#player.pos);
-
-        if(!cell.downWall) {
-            cell.background = "";
-            this.#player.moveDown()
-            this.getCellByPos(this.#player.pos).background = "background: Green;"
-        }
-    }
-
-    movePlayerLeft(){
-        let cell = this.getCellByPos(this.#player.pos);
-
-        if(!cell.leftWall) {
-            cell.background = "";
-            this.#player.moveLeft()
-            this.getCellByPos(this.#player.pos).background = "background: Green;"
-        }
-    }
-
-    movePlayerRight(){
-        let cell = this.getCellByPos(this.#player.pos);
-        if(!cell.rightWall) {
-            cell.background = "";
-            this.#player.moveRight()
-            this.getCellByPos(this.#player.pos).background = "background: Green;"
-        }
-    }
-
-    /** @type {Cell} */
-    #currentCell;
-
-    /** @type {Cell[]} */
-    #cellStack = [];
 
     /**
      * generates maze with "generateMazeStep()" with while
@@ -156,8 +114,7 @@ export class Maze{
             this.#currentCell.background = "background: green;";
         }
 
-        this.getCellByPos(this.#player.pos).background = "background: green;"
-        this.getCellByPos(this.#endPos).background = "background: blue;"
+        this.getCellByPos(this.endPos).background = "background: blue;"
 
         return false;
     }

@@ -29,12 +29,11 @@ export class Cell{
     }
 
     /**
-     * Value Based "==="
-     * @param {Position} pos
-     * @returns {boolean}
+     * @param {Cell} cell
+     * @returns {boolean} true if the object positions are the same (value based)
      */
-    equals(pos){
-        return pos.x === this.pos.x && this.pos.y === this.pos.y;
+    equals(cell){
+        return cell.pos.equals(this.pos)
     }
 
     /**
@@ -47,10 +46,6 @@ export class Cell{
         border += "border-bottom-color:" + (this.downWall ? "black;" : "red;");
         border += "border-left-color:" + (this.leftWall ? "black;" : "red;");
         border += "border-top-color:" + (this.upWall ? "black;" : "red;");
-
-        if(this.background.length > 0){
-            console.log("in cell:" + this.background);
-        }
 
         return `<div class="cell" style="${border + this.background}"></div>`;
     }
