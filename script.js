@@ -6,10 +6,16 @@ import {Position} from "./Position.js";
 
 startButton.addEventListener("click", startClick)
 showPathButton.addEventListener("click", showPath)
+showSmoothGeneration.addEventListener("click", showGeneration)
 document.addEventListener("keydown", keyEventHandler)
+
+const SEED = 11;
 
 /** @type {Maze | null} */
 let maze = null;
+
+/** @type {Game | null} */
+let game = null;
 
 /** html obj that will contain the maze */
 const grid = document.querySelector("#tableContainer");
@@ -18,8 +24,6 @@ function keyEventHandler(e){
     if (maze === null){
         return;
     }
-
-    let game = new Game(maze);
 
     if (e.code === "KeyW"){
         game.movePlayerUp()
@@ -38,41 +42,46 @@ function keyEventHandler(e){
     }
 }
 
+function showGeneration(){
+    seed(SEED);
+    maze.resetToDefault();
+
+    const id = setInterval(() => {
+        draw(grid, maze);
+        const done = maze.generateMazeStep();
+        if (done === true) clearInterval(id);
+    }, 50);
+}
 
 function showPath(){
     let pathFinder = new PathFinder(maze);
+    //pathFinder.generatePath()
 
-    pathFinder.generatePath()
-
-    console.log(pathFinder);
+    const id = setInterval(() => {
+        draw(grid, pathFinder);
+        const done = pathFinder.generatePathStep();
+        if (done === true) clearInterval(id);
+    }, 50);
 
     draw(grid, pathFinder);
 }
 
 
 function startClick() {
-    console.log("clicked");
-
+    console.log("Start click");
     let numberOfRows = Number(document.querySelector("#numberOfRowsAndCols").value);
-    console.log(numberOfRows);
+    seed(SEED);
 
     maze  = new Maze(numberOfRows);
-    seed(7);
-
 
     grid.style.setProperty('--n', numberOfRows);
-
-    // const id = setInterval(() => {
-    //     draw(grid, maze);
-    //     const done = maze.generateMazeStep();
-    //     if (done === true) clearInterval(id);
-    // }, 10);
 
     console.time("MazeGen");
     maze.generateMaze(maze);
     console.timeEnd("MazeGen");
 
-    draw(grid, maze);
+    game = new Game(maze);
+    draw(grid, game);
 }
 
 function draw(grid, maze) {

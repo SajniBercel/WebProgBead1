@@ -6,11 +6,14 @@ export class PathFinder {
     /** @type {Maze} */
     #maze;
 
-    /** @type {number[][]} */
-    #numbers = [];
+    /** @type {number[][] | null} */
+    #numbers = null;
 
     /** @type {Position[]} */
     #path = [];
+
+    /** @type {Position} */
+    #currentPos = null;
 
     /**
      * turns every cell unvisited (cuz it'll be used in path finding)
@@ -18,115 +21,113 @@ export class PathFinder {
      */
     constructor(maze){
         this.#maze = maze;
-        for (let i = 0; i < maze.size; i++) {
+        this.#currentPos = maze.startPos;
+    }
+
+    /**
+     * @returns {boolean} true if done otherwise false
+     */
+    // TODO: return ellenörzés (biztos kell ennyi? nem lehetne elhagyni valami?)
+    generatePathStep(){
+        if(this.#numbers === null)
+            this.generateNumberTable();
+
+        if(this.#currentPos.equals(this.#maze.endPos)){
+            return true;
+        }
+
+        let minPos = this.#currentPos;
+
+        let neighbors = this.#currentPos.getNeighbors()
+            .filter(p => p.y >= 0 && p.x >= 0 && p.y < this.#maze.size && p.x <= this.#maze.size)// remove out of range
+            .map(p => this.#maze.getCellByPos(p))
+            .filter(Boolean);
+
+        if(neighbors.length < 1){
+            return true;
+        }
+        neighbors = neighbors.filter(c => this.isReachable(this.#maze.getCellByPos(this.#currentPos), c))
+            .map(c => c.pos);
+
+        for(let i = 0; i < neighbors.length; i++){
+            if(this.#numbers[minPos.y][minPos.x] > this.#numbers[neighbors[i].y][neighbors[i].x]){
+                minPos = neighbors[i];
+            }
+        }
+
+        this.#currentPos = minPos;
+        this.#path.push(this.#currentPos);
+
+        return false;
+    }
+
+    generatePath(){
+        while (this.generatePathStep()){}
+    }
+
+    generateNumberTable(){
+        // alloc
+        this.#numbers = [];
+        for (let i = 0; i < this.#maze.size; i++) {
             let temp = [];
-            for (let j = 0; j < maze.size; j++) {
-                maze.getCellByXY(j,i).visited = false;
+            for (let j = 0; j < this.#maze.size; j++) {
+                this.#maze.getCellByXY(j,i).visited = false;
                 temp.push(-1);
             }
             this.#numbers.push(temp);
         }
-    }
 
-    generatePath(){
-        this.generateNumberTable();
-
-        let currentPos = this.#maze.startPos;
-
-        /*
-        while (!currentPos.equals(this.#maze.endPos)){
-            currentPos.getNeighbors()
-                .filter(p => p.y >= 0 && p.x >= 0 && p.y < this.#maze.size && p.x <= this.#maze.size)
-                .reduce((acc, cur) => {
-                    if(this.#numbers[cur.y][cur.x] ){}
-                }, this.#maze.size*2)
-
-        }
-        */
-
-        console.log(this.#numbers);
-    }
-
-    // TODO, zsák utcába nem tud merre menni, mert ahonnan jött ott ugye visited a cell és fal van körbe (az isReachable nélkül egész jól müködik)
-    generateNumberTable(){
-        console.log("Finding path");
-
+        // generate number
         let run = true;
-        let currentPos = this.#maze.endPos;
-        let positionsToCheck = [currentPos];
+        let currentCell = this.#maze.getCellByPos(this.#maze.endPos);
         let n = 0;
-        this.placeNumber(n, positionsToCheck);
-        currentPos.visited = true;
+        this.placeNumber(n, currentCell);
         n++;
 
+        let cellsToCheck = this.getValidNeighbours(currentCell.pos);
         while (run) {
-            let tempPositionsToCheck = [];
+            let tempCells = [];
 
-            for (let i = 0; i < positionsToCheck.length; i++) {
-                currentPos = positionsToCheck[i];
+            for(let i = 0; i < cellsToCheck.length; i++){
+                currentCell = cellsToCheck[i];
 
-                let validNeighbours = this.getValidNeighbours(currentPos).map(x => x.pos);
-                console.log("valid neighbours");
-                console.log(validNeighbours);
-                if (validNeighbours.length === 0) {
-                    break;
-                }
+                this.placeNumber(n, currentCell);
+                tempCells.push(this.getValidNeighbours(currentCell.pos));
 
-                console.log("valid:");
-                console.log(validNeighbours);
-
-                this.placeNumber(n, validNeighbours);
-
-                if(currentPos.equals(this.#maze.startPos) || n >= 50){
+                if(this.#maze.getCellByPos(this.#maze.startPos).visited){
                     run = false;
                     break;
                 }
-
-                tempPositionsToCheck.push(validNeighbours);
             }
 
-            positionsToCheck = tempPositionsToCheck.flat(1);
             n++;
-
-            console.log("n");
-            console.log(n);
-
-            if(currentPos.equals(this.#maze.startPos) || n >= 50){
-                run = false;
-                break;
-            }
+            cellsToCheck = tempCells
+                .flat(1)
         }
     }
 
     /**
      * @param {number} n
-     * @param {Position[]} poss
+     * @param {Cell} cell
      */
-    placeNumber(n, poss){
-        for(let i = 0; i < poss.length; i++) {
-            this.#numbers[poss[i].y][poss[i].x] = n;
-            this.#maze.getCellByPos(poss[i]).visited = true;
-        }
+    placeNumber(n, cell) {
+        this.#numbers[cell.pos.y][cell.pos.x] = n;
+        cell.visited = true;
     }
 
     /**
-     * @param pos
+     * @param {Position} pos
      * @returns {(Cell|null)[]}
      */
+    // TESTED
     getValidNeighbours(pos){
         const Neighbours = pos.getNeighbors()
             .map((p) => this.#maze.getCellByPos(p))
             .filter(Boolean)
             .filter(c => c.visited === false);
 
-        console.log("inside:");
-        console.log(Neighbours);
-
         let cell = this.#maze.getCellByPos(pos);
-        let output = Neighbours/*.filter(c => this.isReachable(cell, c));*/
-
-        console.log("output:");
-        console.log(output);
+        let output = Neighbours.filter(c => this.isReachable(cell, c));
 
         return output;
     }
@@ -136,7 +137,6 @@ export class PathFinder {
      * @param {Cell} cellB
      * @returns {boolean} true if the 2 cell can reach each others, otherwise false
      */
-    // TODO
     isReachable(cellA, cellB){
         if(cellA.pos.x > cellB.pos.x){
             if(cellA.leftWall || cellB.rightWall){
@@ -165,11 +165,17 @@ export class PathFinder {
      * @returns {string} String that contains the Maze as html tags
      */
     toHtml() {
-        for(let i = 0; i < this.#numbers.length; i++){
-            for(let j = 0; j < this.#numbers[i].length; j++) {
-                // TODO
-            }
+        console.log("PathFinder toHtml");
+
+        for(let i = 0; i < this.#path.length; i++){
+            this.#maze.getCellByPos(this.#path[i]).background = "background: gray;";
         }
-        return this.#maze.toHtml();
+
+        let output = this.#maze.toHtml();
+
+        for(let i = 0; i < this.#path.length; i++){
+            this.#maze.getCellByPos(this.#path[i]).background = "";
+        }
+        return output;
     }
 }

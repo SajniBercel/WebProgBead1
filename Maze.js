@@ -1,7 +1,6 @@
 import { rand } from "./sbRandom.js";
 import { Cell } from "./Cell.js";
 import { Position } from "./Position.js";
-import { Player } from "./Player.js";
 
 export class Maze{
     /** @type {[Cell[]]} */
@@ -33,6 +32,7 @@ export class Maze{
         this.endPos = new Position(this.size-1, mid);
         this.startPos = new Position(0, mid);
 
+        this.#mazeMap = [];
         for (let i = 0; i < n; i++) {
             let row = [];
             for (let j = 0; j < n; j++) {
@@ -44,7 +44,21 @@ export class Maze{
         this.#currentCell = this.#mazeMap[mid][0];
         this.#currentCell.visited = true;
         this.#cellStack = [this.#currentCell];
-        this.#mazeMap[this.endPos.y][this.endPos.x].background = "background: blue;";
+    }
+
+    resetToDefault(){
+        this.#mazeMap = [];
+        for (let i = 0; i < this.size; i++) {
+            let row = [];
+            for (let j = 0; j < this.size; j++) {
+                row.push(new Cell(j, i));
+            }
+            this.#mazeMap.push(row);
+        }
+
+        this.#currentCell = this.#mazeMap[Math.floor(this.size / 2)][0];
+        this.#currentCell.visited = true;
+        this.#cellStack = [this.#currentCell];
     }
 
     /**
@@ -77,7 +91,7 @@ export class Maze{
     }
 
     /**
-     * @returns {boolean} returns true when done, otherwise false
+     * @returns {boolean} true if done, otherwise false
      */
     generateMazeStep () {
         if(this.#cellStack.length === 0){
@@ -146,6 +160,9 @@ export class Maze{
      */
     toHtml(){
         console.log("maze.toHtml");
+
+        this.#mazeMap[this.endPos.y][this.endPos.x].background = "background: blue;"; // end cell
+
         let output = "";
         for(let i = 0; i < this.size; i++){
             for(let j = 0; j < this.size; j++) {

@@ -24,7 +24,7 @@ export class Position{
 
     /**
      * @param {Position} pos
-     * @returns {boolean} value based "=="
+     * @returns {boolean} value based "==="
      */
     equals(pos){
         return pos.x === this.x && pos.y === this.y;
