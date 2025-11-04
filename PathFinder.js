@@ -22,15 +22,16 @@ export class PathFinder {
     constructor(maze){
         this.#maze = maze;
         this.#currentPos = maze.startPos;
+        this.#numbers = [];
     }
 
     /**
      * @returns {boolean} true if done otherwise false
      */
-    // TODO: return ellenörzés (biztos kell ennyi? nem lehetne elhagyni valami?)
     generatePathStep(){
-        if(this.#numbers === null)
+        if(this.#numbers === null || this.#numbers.length < this.#maze.size) {
             this.generateNumberTable();
+        }
 
         if(this.#currentPos.equals(this.#maze.endPos)){
             return true;
@@ -46,6 +47,7 @@ export class PathFinder {
         if(neighbors.length < 1){
             return true;
         }
+
         neighbors = neighbors.filter(c => this.isReachable(this.#maze.getCellByPos(this.#currentPos), c))
             .map(c => c.pos);
 
@@ -62,7 +64,7 @@ export class PathFinder {
     }
 
     generatePath(){
-        while (this.generatePathStep()){}
+        while (!this.generatePathStep()){}
     }
 
     generateNumberTable(){
@@ -127,9 +129,7 @@ export class PathFinder {
             .filter(c => c.visited === false);
 
         let cell = this.#maze.getCellByPos(pos);
-        let output = Neighbours.filter(c => this.isReachable(cell, c));
-
-        return output;
+        return Neighbours.filter(c => this.isReachable(cell, c));
     }
 
     /**
@@ -161,12 +161,20 @@ export class PathFinder {
         return true;
     }
 
+
+    resetToDefault(){
+        this.#maze.resetToDefault();
+        this.#path = [];
+        this.numbers = [];
+        this.#currentPos = maze.startPos;
+    }
+
+
     /**
      * @returns {string} String that contains the Maze as html tags
      */
+    /*
     toHtml() {
-        console.log("PathFinder toHtml");
-
         for(let i = 0; i < this.#path.length; i++){
             this.#maze.getCellByPos(this.#path[i]).background = "background: gray;";
         }
@@ -177,5 +185,36 @@ export class PathFinder {
             this.#maze.getCellByPos(this.#path[i]).background = "";
         }
         return output;
+    }
+    */
+
+    /**
+     * @returns {HTMLElement[][]}
+     */
+    toElement(){
+        /** @type {HTMLElement[][]} */
+        let elements = this.#maze.toElement();
+
+        for(let i = 1; i < this.#path.length; i++){
+            if (this.#path[i-1].y > this.#path[i].y){
+                elements[this.#path[i-1].y][this.#path[i-1].x].style.borderTopColor = "gray";
+                elements[this.#path[i].y][this.#path[i].x].style.borderBottomColor = "gray";
+            } else if (this.#path[i-1].y < this.#path[i].y) {
+                elements[this.#path[i-1].y][this.#path[i-1].x].style.borderBottomColor = "gray";
+                elements[this.#path[i].y][this.#path[i].x].style.borderTopColor = "gray";
+            }else if (this.#path[i-1].x > this.#path[i].x){
+                elements[this.#path[i-1].y][this.#path[i-1].x].style.borderLeftColor = "gray";
+                elements[this.#path[i].y][this.#path[i].x].style.borderRightColor = "gray";
+            } else if (this.#path[i-1].x < this.#path[i].x) {
+                elements[this.#path[i-1].y][this.#path[i-1].x].style.borderRightColor = "gray";
+                elements[this.#path[i].y][this.#path[i].x].style.borderLeftColor = "gray";
+            }
+
+            elements[this.#path[i-1].y][this.#path[i-1].x].style.backgroundColor = "gray";
+        }
+        // az első elem legyen zőld (mintha egy csiga húzná a csíkot)
+        elements[this.#path[this.#path.length-1].y][this.#path[this.#path.length-1].x].style.backgroundColor = "green";
+
+        return elements;
     }
 }

@@ -72,11 +72,22 @@ export class Game{
     /**
      * @returns {string} String that contains the Maze as html tags
      */
+    /*
     toHtml() {
         this.#maze.getCellByPos(this.#player.pos).background = "background: Green;";
         let output = this.#maze.toHtml();
         this.#maze.getCellByPos(this.#player.pos).background = "";
 
         return output;
+    }
+    */
+
+    /**
+     * @returns {HTMLElement[][]}
+     */
+    toElement(){
+        let elements = this.#maze.toElement();
+        elements[this.#player.pos.y][this.#player.pos.x].style.backgroundColor = "green";
+        return elements;
     }
 }

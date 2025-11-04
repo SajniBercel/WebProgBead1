@@ -37,16 +37,22 @@ export class Cell{
     }
 
     /**
-     * @returns {string} String that contains the Cell as html tags
+     * @returns {HTMLDivElement}
      */
-    toHtml(){
-        let border = "";
+    toElement() {
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
 
-        border += "border-right-color:" + (this.rightWall ? "black;" : "red;");
-        border += "border-bottom-color:" + (this.downWall ? "black;" : "red;");
-        border += "border-left-color:" + (this.leftWall ? "black;" : "red;");
-        border += "border-top-color:" + (this.upWall ? "black;" : "red;");
+        cell.style.borderStyle = "solid";
 
-        return `<div class="cell" style="${border + this.background}"></div>`;
+        // a szélességét majd a manager állítja a mérethez
+
+        cell.style.borderRightColor = this.rightWall ? "black" : "red";
+        cell.style.borderBottomColor = this.downWall ? "black" : "red";
+        cell.style.borderLeftColor  = this.leftWall ? "black" : "red";
+        cell.style.borderTopColor   = this.upWall ? "black" : "red";
+
+        return cell;
     }
+
 }

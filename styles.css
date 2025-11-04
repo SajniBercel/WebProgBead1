@@ -1,23 +1,68 @@
 body{
     background-color: #3a3a3a;
+    font-family: Tahoma, Geneva, Verdana, sans-serif;
+    color: #E9E9E9;
+}
+
+.smallFontHeader{
+    font-weight: bold;
+    font-size: 30px;
+}
+
+h1{
+    font-size: 40px;
+    margin: 0;
+    padding: 0;
+}
+
+h2{
+    font-size: 35px;
+}
+
+h1, h2{
+    text-align: center;
+    font-weight: normal;
+}
+
+.menu{
+    text-align: center;
+}
+
+.button{
+    text-align: center;
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 5px;
+    background-color: rgba(200,200,200, 0.2);
+    text-decoration: none;
+    color: white;
+
+    transition: 0.2s;
+}
+
+.button:hover{
+    background-color: rgba(200,200,200, 0.3);
+    border-radius: 0;
 }
 
 .container {
     margin-left: auto;
-    margin-right: auto;  /* vízszintes közép */
+    margin-right: auto;
 
-
-    /* állítsd be JS-ből is lehet, lásd lent */
-    --n: 8;
-    --size: calc(80dvh / var(--n));   /* cella oldala = 100% magasság / sorok száma */
+    --n: 8; /* !!!be kell állítani js-ből (még dom. man. előtt) */
+    --size: calc(65vh / var(--n));
 
     display: grid;
-    height: 100dvh;                    /* TELJES képernyőmagasság */
-    width: calc(var(--n) * var(--size));/* szélesség = N * cellaméret => négyzet konténer */
+    width: calc(var(--n) * var(--size));
     grid-template-columns: repeat(var(--n), var(--size));
     grid-template-rows: repeat(var(--n), var(--size));
-    /* fontos: ne használj gap-et, mert akkor nem tölti ki pontosan a 100dvh-t */
-    /* ha kell szegély: inkább .cell-re tegyél belső jelölést */
+}
+
+@media (max-width: 678px) { /* csak hogy telefonon se nézzen ki hülyén */
+    .container {
+        --size: calc(65vw / var(--n));
+        width: calc(var(--n) * var(--size));
+    }
 }
 
 .cell {
@@ -25,5 +70,26 @@ body{
     border-width: 2px;
     display: grid;
     place-items: center;
-    background: Red;
+    background: red;
 }
+
+.slimBorder {
+    border-width: 1px; !important;
+}
+
+.form-flex {
+    max-width: 900px;
+    margin-inline: auto;
+    margin-top: 0;
+    padding: 0;
+}
+.row { display: flex; gap: 1rem; }
+.row > * { flex: 1; }
+.row.full { display: block; }
+.row.full > * { width: 100%; }
+.row.separator{ margin-top: 1rem; }
+
+/*
+.row { justify-content: space-between; }
+.row > * { flex: 0 0 auto; }
+*/

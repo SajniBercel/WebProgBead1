@@ -25,8 +25,6 @@ export class Maze{
 
     /** @param {number} n */
     constructor (n) {
-        console.log("maze start");
-
         const mid = Math.floor(n / 2);
         this.size = n;
         this.endPos = new Position(this.size-1, mid);
@@ -125,10 +123,7 @@ export class Maze{
 
         if(this.#currentCell != null) {
             this.#currentCell.visited = true;
-            this.#currentCell.background = "background: green;";
         }
-
-        this.getCellByPos(this.endPos).background = "background: blue;"
 
         return false;
     }
@@ -158,6 +153,7 @@ export class Maze{
     /**
      * @returns {string} String that contains the Maze as html tags
      */
+    /*
     toHtml(){
         console.log("maze.toHtml");
 
@@ -171,5 +167,28 @@ export class Maze{
         }
 
         return output;
+    }
+    */
+
+    /**
+     * @returns {HTMLElement[][]}
+     */
+    toElement(){
+        /** @type {HTMLElement[][]} */
+        let elements = [];
+        for(let i = 0; i < this.size; i++){
+            let temp = [];
+            for(let j = 0; j < this.size; j++) {
+                temp.push(this.#mazeMap[i][j].toElement());
+            }
+            elements.push(temp);
+        }
+
+        elements[this.endPos.y][this.endPos.x].style.backgroundColor = "blue";
+        if(this.#currentCell != null) {
+            elements[this.#currentCell.pos.y][this.#currentCell.pos.x].style.backgroundColor = "green";
+        }
+
+        return elements;
     }
 }
