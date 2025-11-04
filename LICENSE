@@ -21,5 +21,5 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 references:
-MazeGeneration algo: https://en.wikipedia.org/wiki/Linear_congruential_generator#Parameters_in_common_use
-RandomNumber algo: https://en.wikipedia.org/wiki/Linear_congruential_generator#Parameters_in_common_use
+MazeGeneration algo: https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_implementation
+RandomNumber algo: https://en.wikipedia.org/wiki/Linear_congruential_generator
