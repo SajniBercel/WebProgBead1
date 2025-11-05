@@ -70,6 +70,7 @@ function keyEventHandler(e){
         draw(grid, mainGame);
         alert("Gartulálok, nyertél a játék " + (Math.round((performance.now() - Timer) / 100) / 10).toString() + "mp időt vett igénybe");
         mainGame = new Game(mainMaze);
+        Timer = performance.now();
         draw(grid, mainGame);
     }
 }
