@@ -91,6 +91,7 @@ async function showPath(){
 
     await generatePathAnimated(pathFinder, grid, sleepTime);
     // direkt nem áll vissza játék állapotba hogy tálható maradjon az út
+    mainGame = null;
     enableButtons();
 }
 
