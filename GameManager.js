@@ -12,6 +12,7 @@ showPathButton.addEventListener("click", showPath)
 showSmoothGeneration.addEventListener("click", showGeneration)
 document.addEventListener("keydown", keyEventHandler)
 
+/** @type {number} */
 let seedForRandom = 11;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
@@ -27,6 +28,9 @@ let mainMaze = null;
 /** @type {Game | null} */
 let mainGame = null;
 
+// a startban felül lesz írva úgyhogy nem fog rossz értéket adni
+let Timer = performance.now();
+
 function disableButtons() {
     isProcessing = true;
     startButton.disabled = true;
@@ -41,62 +45,76 @@ function enableButtons() {
     showSmoothGeneration.disabled = false;
 }
 
+
 function keyEventHandler(e){
     if (mainMaze === null || mainGame === null || isProcessing) {
         return;
     }
 
-    if (e.code === "KeyW"){
+    if (e.code === "KeyW" || e.code === "ArrowUp") {
         mainGame.movePlayerUp()
-    } else if (e.code === "KeyS"){
+    } else if (e.code === "KeyS" || e.code === "ArrowDown") {
         mainGame.movePlayerDown()
-    } else if (e.code === "KeyA"){
+    } else if (e.code === "KeyA" || e.code === "ArrowLeft") {
         mainGame.movePlayerLeft()
-    } else if (e.code === "KeyD"){
+    } else if (e.code === "KeyD" || e.code === "ArrowRight") {
         mainGame.movePlayerRight()
     } else {
-        console.log("no key like: " + e.code);
+        console.log("unknown keycode: " + e.code);
         return;
     }
 
     if (!mainGame.checkWin()){
         draw(grid, mainGame);
     } else {
-        console.log("\nJáték vége\n");
+        draw(grid, mainGame);
+        alert("Gartulálok, nyertél a játék " + (Math.round((performance.now() - Timer) / 100) / 10).toString() + "mp időt vett igénybe");
+        mainGame = new Game(mainMaze);
+        draw(grid, mainGame);
     }
 }
 
 async function showPath(){
+    if (mainMaze === null || mainGame === null || isProcessing) {
+        return;
+    }
     disableButtons();
 
+    mainGame = new Game(mainMaze); // a játékot 'reset'-eli
     let pathFinder = new PathFinder(mainMaze);
 
-    let sleepTime = Number(document.querySelector("#animationStepTimer"));
+    let sleepTime = Number(document.querySelector("#animationStepTimer").value);
     if(sleepTime < 0){
         sleepTime = 0;
     }
 
     await generatePathAnimated(pathFinder, grid, sleepTime);
-
+    // direkt nem áll vissza játék állapotba hogy tálható maradjon az út
     enableButtons();
 }
 
 async function showGeneration(){
+    if (mainMaze === null || mainGame === null || isProcessing) {
+        return;
+    }
     disableButtons();
+    mainGame = new Game(mainMaze); // a játékot 'reset'-eli
 
     // ez így kicsit csúnya de vissza kell állítani eredeti állapotba hogy ugyan az legyen mint az eredeti labirintus (pseudo random)
     seed(seedForRandom);
     mainMaze.resetToDefault();
 
-    let sleepTime = Number(document.querySelector("#animationStepTimer"));
+    let sleepTime = Number(document.querySelector("#animationStepTimer").value);
     if(sleepTime < 0){
         sleepTime = 0;
     }
 
     await generateMazeAnimated(mainMaze, grid, sleepTime);
-    draw(grid, mainMaze);
+    draw(grid, mainGame); // vissza áll a játék állapotba
 
     enableButtons();
+
+    Timer = performance.now();
 }
 
 /**
@@ -109,11 +127,10 @@ async function generateMazeAnimated(maze, grid, delayMs) {
     let done = false;
     while (!done) {
         done = maze.generateMazeStep();
-        //console.log(done);
+        //console.log("done: " + done);
         draw(grid, maze);
         await sleep(delayMs);
     }
-    //console.log("maze gen anim stoped;")
 }
 
 /**
@@ -130,7 +147,6 @@ async function generatePathAnimated(path, grid, delayMs) {
         draw(grid, path);
         await sleep(delayMs);
     }
-    //console.log("path anim stoped;")
 }
 
 /**
@@ -164,6 +180,7 @@ function startClick() {
     mainMaze.generateMaze();
     draw(grid, mainGame);
 
+    Timer = performance.now();
     enableButtons()
 }
 
@@ -177,7 +194,7 @@ function draw(grid, maze) {
     let mazeElements = maze.toElement();
 
     let borderSize = 2;
-    if(mazeElements.length > 20 || mazeElements[0].length > 20){
+    if(mazeElements.length >= 15 || mazeElements[0].length >= 15){
         borderSize = 1;
     }
 

@@ -105,7 +105,6 @@ export class Maze{
 
         if(Neighbours.length > 0){
             let nextCell = Neighbours[randomNum%Neighbours.length];
-
             this.#cellStack.push(nextCell);
 
             this.removeWall(this.#currentCell, nextCell);
@@ -149,26 +148,6 @@ export class Maze{
             B.leftWall = false;
         }
     }
-
-    /**
-     * @returns {string} String that contains the Maze as html tags
-     */
-    /*
-    toHtml(){
-        console.log("maze.toHtml");
-
-        this.#mazeMap[this.endPos.y][this.endPos.x].background = "background: blue;"; // end cell
-
-        let output = "";
-        for(let i = 0; i < this.size; i++){
-            for(let j = 0; j < this.size; j++) {
-                output += this.getCellByXY(j, i).toHtml();
-            }
-        }
-
-        return output;
-    }
-    */
 
     /**
      * @returns {HTMLElement[][]}

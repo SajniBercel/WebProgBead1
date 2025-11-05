@@ -1,4 +1,4 @@
-let s = 1;
+let s = 11;
 
 export function seed(x) {
     s = x || 1;

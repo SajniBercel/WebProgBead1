@@ -25,14 +25,20 @@ h1, h2{
 }
 
 .menu{
-    text-align: center;
+    text-align: justify;
+    width: 650px;
+    margin: auto;
+}
+
+p{
+    text-indent: 20px;
 }
 
 .button{
     text-align: center;
     padding: 10px;
     border: 1px solid white;
-    border-radius: 5px;
+    border-radius: 8px;
     background-color: rgba(200,200,200, 0.2);
     text-decoration: none;
     color: white;
@@ -63,6 +69,10 @@ h1, h2{
         --size: calc(65vw / var(--n));
         width: calc(var(--n) * var(--size));
     }
+
+    .menu{
+        width: 100%;
+    }
 }
 
 .cell {
@@ -78,7 +88,8 @@ h1, h2{
 }
 
 .form-flex {
-    max-width: 900px;
+    max-width: 600px;
+    min-width: 360px;
     margin-inline: auto;
     margin-top: 0;
     padding: 0;
@@ -93,3 +104,8 @@ h1, h2{
 .row { justify-content: space-between; }
 .row > * { flex: 0 0 auto; }
 */
+
+input{
+    width: 100%;
+    min-width: 50px;
+}
