@@ -1,5 +1,5 @@
-Játék: https://sajnibercel.web.elte.hu/Labirintus/
-GitHub: https://github.com/SajniBercel/WebProgBead1
+Játék: https://sajnibercel.web.elte.hu/Labirintus/ <br/>
+GitHub: https://github.com/SajniBercel/WebProgBead1 <br/>
 (érdemes lehet ezt a file-t is inkább github-on megnézni inkább mert ott a github szépen be formázza)
 
 # A játék használata
