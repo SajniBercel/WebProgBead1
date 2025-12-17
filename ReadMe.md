@@ -53,16 +53,16 @@ Szóval utána néztem hogy mit lehet csinálni és azt találtam hogy alig pár
 Mivel régebben is csináltam ilyen megoldásokat ezért most ehhez nem használtam forrást.
 Annyi tudok mondani hogy egy elég naív algoritmust használtam a Dijkstra-algoritmus
 
-# Php rész, Hogyan müködik a weboldal?
+# Php rész, Hogyan működik a weboldal?
 Ha nincs bejelentkezve a felhasználó akkor az index.php-ről a loginPage.php-ra lesz átirányítva ami egy egyszerű bejelentkező felület.
-Itt van egy link a regszitrációs oldalra is ha még nincsen felhasználói fiókja, a regsztráció után be is jelentkezik nem kell külön regisztrálni majd belépni.
+Itt van egy link a regisztrációs oldalra is ha még nincsen felhasználói fiókja, a regsztráció után be is jelentkezik nem kell külön regisztrálni majd belépni.
 A validáció viszont mind a regisztrációnál mind a bejelentkezésnél érvényes (a jelszavak természetesn hash-elve vannak tárolva).
 A bejelentkezés után van egy gomb amivel a játékot tudjuk elindítani, illetve egy gomb amivel a LeaderBoard-ot tudjuk megnézni, ezt adatbázisból kérdezi le természetesen és idő szerint van sorba rakva
 az oldalt php kód generálja le, a harmadik gomb a kijelentkezés, törli a session-t és a session változó tartalmát.
 Ha végig játszunk egy játékot akkor a játék végén elmenti az eredményünket (egy pályát két adat határozza meg, a mérete és a seed amit a fentebb olvasható pszeudo random szám generálásához használok) a játék végén a bejelentkezett felhasználó ID-ja (ezzel lehet majd visszanyerni a nevét)
 és a pálya mérete és a seed mentődik el az adatbázisba nyilván való okokból
 
-## php nyelvi elemie
+## php nyelvi elemei
 használtam függvényeket, "const"-ot és OOP-s megoldásokat mint pl a PDO, session stb.
 
 ## Kimenet generálása PHP-vel
@@ -88,7 +88,7 @@ minden file elején van egy ilyen "guard" szerű dolog ami annyit csinál hogy h
 meg a bejelentkező oldalra ha nincs bejelentkezve, különben meg a főmenü szerű oldalra (manual.php) oldalra irányítja át
 
 ## Kódszervezés: logikai (osztályok és függvények) és fizikai (fájlok)
-mivel probémám volt azzal amikor a file-ok szét voltak pakolva mappákban ezért inkább kiraktam mindent a js-en kívül root könyvtárba,
+mivel problémám volt azzal amikor a file-ok szét voltak pakolva mappákban ezért inkább kiraktam mindent a js-en kívül root könyvtárba,
 tisztában vagyok vele hogy visszataszítóan csúnya így és ez így nem helyes de sajnos idő szűkében vagyok és az volt az elsődeleges hogy müködjön
 
 ## Aszinkron programozás szerver oldali kiszolgálása
