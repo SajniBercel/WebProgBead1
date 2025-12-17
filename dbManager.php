@@ -5,15 +5,27 @@ include_once("config.php");
  * létrehoz egy adabázis kapcsolatot
  * @return PDO
  */
-function dbConnection(): PDO {
-    global $dns;
-    global $userName;
-    global $password;
-    global $options;
+function getConnection(): PDO {
+    // ELTE:
+    $host = 'mysql.caesar.elte.hu';
+    $dbName = 'sajnibercel';
+    $userName = 'sajnibercel';
+    $password = 'fwgihHmjH6sL4FxM';
+
+    //LOCALHOST:
+//    $host = 'localhost';
+//    $dbName = 'maze';
+//    $userName = 'root';
+//    $password = '';
+
+    $options = [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+    ];
 
     $pdo = null;
     try {
-        $pdo = new PDO($dns, $userName, null, $options); //TODO: át kell írni ha szerveren lesz
+        $pdo = new PDO("mysql:host=$host;dbname=$dbName;charset=utf8mb4", $userName, $password, $options); //TODO: a jelszót localhost-on null-ra kell írni
     } catch (PDOException $e) {
         die("[dbManager.dbConnection] Adatbázis hiba kapcsolodás közben: " . $e->getMessage());
     }
@@ -88,6 +100,52 @@ function addUser(PDO $pdo, string $username, string $password): int {
     }
 }
 
+function updateUser(PDO $pdo, int $userID, float $time, int $size, int $seed): void {
+    $sql = "INSERT INTO game (player_id, time, size, seed) 
+            VALUES (:userID, :time, :size, :seed)";
+    $stmt = $pdo->prepare($sql);
+
+    try {
+        $stmt->execute([
+            ':userID' => $userID,
+            ':time' => $time,
+            ':size' => $size,
+            ':seed' => $seed,
+        ]);
+    } catch (PDOException $e) {
+
+    }
+}
+
+/**
+ * string tömb (táblázatos formában)
+ * @param PDO $pdo
+ * @return array
+ */
+function getLeaderBoard(PDO $pdo) {
+    $query = "SELECT u.name, g.time, g.size, g.seed 
+              FROM user u
+              JOIN game g ON u.id = g.player_id
+              ORDER BY g.time DESC";
+
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
+
+    $leaderboard = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $result = [];
+    foreach ($leaderboard as $row) {
+        $result[] = [
+            $row['name'],
+            (string)$row['time'],
+            (string)$row['size'],
+            (string)$row['seed']
+        ];
+    }
+
+    return $result;
+}
+
 // csak hogy ha kell akkor gyorsan lehessen db-t csinálni
 function createDbIfNotExists(){
     $createTableUser = "CREATE TABLE IF NOT EXISTS `user` 
@@ -104,14 +162,10 @@ function createDbIfNotExists(){
     `time`      DOUBLE       NOT NULL,
     `size`      INT          NOT NULL,
     `seed`      INT          NOT NULL,
-    PRIMARY KEY (`id`),
-    CONSTRAINT `fk_game_user`
-        FOREIGN KEY (`player_id`) REFERENCES `user`(`id`)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
+    PRIMARY KEY (`id`)
     )";
 
-     $pdo = dbConnection();
+     $pdo = getConnection();
 
     try {
         $pdo->exec($createTableUser);

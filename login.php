@@ -6,9 +6,9 @@ $_SESSION["errorList"] = "";
 
 if(!isset($_POST['username']) || !isset($_POST['password'])){
     $_SESSION["errorList"] .= "nincs bállítva felhasználónév vagy jelszó";
+    header('Location: authResponse.php');
+    exit;
 }
-
-header('Location: authResponse.php');
 
 $username = $_POST['username'];
 $password = $_POST['password'];
@@ -26,7 +26,7 @@ if(strlen($_SESSION["errorList"]) > 1) {
     exit;
 }
 
-$pdo = dbConnection();
+$pdo = getConnection();
 
 $response = checkLogin($pdo, $username, $password);
 if ($response == -1){

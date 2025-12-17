@@ -6,17 +6,21 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<form action="register.php" method="post">
-    <label for="username">Felhasználónév</label>
-    <input name="username" id="username" type="text" placeholder="Add meg a felhasználó neved">
+<div class="authPanel">
+    <h1 style="margin-bottom: 20px;">REGISTER</h1>
+    <form action="register.php" method="post">
+        <label for="username">Felhasználónév</label>
+        <input class="inputField" name="username" id="username" type="text" placeholder="Add meg a felhasználó neved">
 
-    <label for="password">Jelszó</label>
-    <input name="password" id="password" type="password" placeholder="legalább 6 karakter">
+        <label for="password">Jelszó</label>
+        <input class="inputField" name="password" id="password" type="password" placeholder="legalább 6 karakter">
 
-    <input type="submit">
-</form>
-<a href="loginPage.html">login</a>
+        <input type="submit" class="button">
+    </form>
+    <a href="loginPage.html">login</a>
+</div>
 </body>
 </html>

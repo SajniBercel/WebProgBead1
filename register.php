@@ -30,7 +30,7 @@ if (strlen($_SESSION["errorList"]) > 1) {
     exit;
 }
 
-$pdo = dbConnection();
+$pdo = getConnection();
 $response = addUser($pdo, $username, $password);
 if ($response == -1){
     $_SESSION["errorList"] .= "már létezik ez a felhasználónév\n";

@@ -4,6 +4,69 @@ body{
     color: #E9E9E9;
 }
 
+table {
+    width: 80%;
+    border-collapse: collapse;
+    box-shadow: 20px 20px 20px rgba(255, 0, 0, 0.3);
+    margin: auto;
+}
+
+th, td {
+    border: 2px solid red;
+    padding: 10px;
+    text-align: center;
+}
+
+tr:nth-child(even) {
+    background-color: #2a2a2a;
+}
+
+tr:hover {
+    background-color: #251414;
+}
+
+.authPanel{
+    width: 300px;
+    padding: 100px;
+    background-color: #3a3a3a;
+    color: #E9E9E9;
+    border: 1px solid red;
+    border-radius: 20px;
+    margin: auto;
+    box-shadow: 20px 20px 20px rgba(255, 0, 0, 0.3);
+
+}
+
+.authPanel label{
+    font-size: 42px;
+}
+
+.inputField{
+    height: 34px;
+    font-size: 32px;
+}
+
+.inputField::placeholder{
+    font-size: 16px;
+}
+
+@media (max-width: 678px) {
+    .authPanel{
+        width: 200px;
+        padding: 50px;
+        box-shadow: 10px 10px 10px rgba(255, 0, 0, 0.3);
+    }
+
+    .authPanel label{
+        font-size: 32px;
+    }
+
+    .inputField{
+        height: 28px;
+        font-size: 22px;
+    }
+}
+
 .smallFontHeader{
     font-weight: bold;
     font-size: 30px;
@@ -108,4 +171,8 @@ p{
 input{
     width: 100%;
     min-width: 50px;
+}
+
+a {
+    color: white;
 }

@@ -7,13 +7,14 @@ include_once("auth.php");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Labirintus</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/x-icon" href="https://sajnibercel.web.elte.hu/Labirintus/icon.png">
 </head>
 <body>
     <form class="form-flex">
         <div class="row full">
-            <h1 class="smallFontHeader">Labirintus (D6N2QU)</h1>
+            <h1 class="smallFontHeader">Labirintus (<?php echo $_SESSION["username"]?>)</h1>
         </div>
         <div class="row separator">
             <label for="numberOfRowsAndCols" title="leave as 0 if don't know what is this (the default is 11)">Seed for the randomization: </label>
@@ -32,6 +33,9 @@ include_once("auth.php");
         <div class="row">
             <input type="button" class="button" id="showPathButton" value="Show Path Animation">
             <input type="button" class="button" id="showSmoothGeneration" value="Show Generation Animation">
+        </div>
+        <div class="row">
+            <a href="manual.php" class="button" style="margin-top: 10px">Vissza A Főmenübe</a>
         </div>
     </form>
     <div class="container" id="tableContainer"></div>

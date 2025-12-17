@@ -35,7 +35,8 @@
             viszont a legrövidebb elérési útnál ott a játékosnak kell manuálisan új játékot indítani (mivel így addig tudja nézegetni az utat ameddig ő szeretné)
         </p>
         <div style="text-align: center; margin-top: 40px;">
-            <a href="GamePage.php" class="button">Játék indítása</a>
+            <a href="gamePage.php" class="button">Játék indítása</a>
+            <a href="leaderBoardPage.php" class="button">LeaderBoard</a>
             <a href="logout.php" class="button">Kijelentkezés</a>
         </div>
     </section>

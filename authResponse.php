@@ -17,11 +17,13 @@ include_once('config.php');
         echo '</div>';
     } else {
         echo '<div class="siker">';
-        echo 'Sikeres művelet. <a href="index.php">vissza a főoldalhoz</a>';
+        echo 'Sikeres művelet.';
         echo '</div>';
     }
 
     $_SESSION["errorList"] = "";
 ?>
+
+<a href="index.php">Vissza a bejelentkezéshez</a>
 </body>
 </html>

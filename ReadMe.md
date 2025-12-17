@@ -1,3 +1,5 @@
+# !!! A js readme részt bent hagytam a file végére írtam a php readme rész (56. sor) !!!
+
 Játék: https://sajnibercel.web.elte.hu/Labirintus/ <br/>
 GitHub: https://github.com/SajniBercel/WebProgBead1 <br/>
 (érdemes lehet ezt a file-t is inkább github-on megnézni inkább mert ott a github szépen be formázza)
@@ -50,3 +52,7 @@ Szóval utána néztem hogy mit lehet csinálni és azt találtam hogy alig pár
 ## Legrövidebb út
 Mivel régebben is csináltam ilyen megoldásokat ezért most ehhez nem használtam forrást.
 Annyi tudok mondani hogy egy elég naív algoritmust használtam a Dijkstra-algoritmus
+
+# Php rész
+## php nyelvi elemie
+használtam függvényeket, "const"-ot és OOP-s megoldásokat mint pl a PDO

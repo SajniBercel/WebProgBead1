@@ -68,7 +68,23 @@ function keyEventHandler(e){
         draw(grid, mainGame);
     } else {
         draw(grid, mainGame);
-        alert("Gartulálok, nyertél a játék " + (Math.round((performance.now() - Timer) / 100) / 10).toString() + "mp időt vett igénybe");
+        let time = (Math.round((performance.now() - Timer) / 100) / 10)
+        alert("Gratulálok, nyertél a játék " + time + "mp időt vett igénybe");
+        $.ajax({
+            url: "saveGame.php",
+            method: "POST",
+            data: {
+                time: time,
+                size: mainMaze.size,
+                seed: seedForRandom,
+            },
+            success: function (){
+                alert("Az adatok mentésre kerültek")
+            },
+            error: function () {
+                alert("Hiba a mentés közben, küldj email-t a d6n2qu@inf.elte.hu -ra");
+            }
+        });
         mainGame = new Game(mainMaze);
         Timer = performance.now();
         draw(grid, mainGame);
