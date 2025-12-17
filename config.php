@@ -1,6 +1,7 @@
 <?php
-const USERNAME_MIN_LENGTH = 3;
-const PASSWORD_MIN_LENGTH = 5;
+const USERNAME_MIN_LENGTH = 4;
+const PASSWORD_MIN_LENGTH = 6;
+const USERNAME_MAX_LENGTH = 20;
 
 //TODO: ezt át kell írni
 const ROOT = "C:\\xampp\\htdocs\\Weboldal\\";
@@ -23,7 +24,6 @@ $options = [
 
 try {
     $pdo = new PDO($dns, $userName, $password, $options);
-    echo "sikeres DB kapcsolat";
 } catch (PDOException $e) {
     die("[config] Adatbázis hiba kapcsolodás közben: " . $e->getMessage());
 }

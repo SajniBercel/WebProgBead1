@@ -52,12 +52,24 @@ function checkLogin(PDO $pdo, string $username, string $plainPassword): int {
 }
 
 /**
+ * -1: már létezik a felhasználó név <br>
+ * -2: egyéb ismeretlen hiba <br>
+ * mindenmás: a létrejött userID
  * @param PDO $pdo
  * @param string $username
  * @param string $password
- * @return bool
+ * @return int
  */
-function addUser(PDO $pdo, string $username, string $password): bool {
+function addUser(PDO $pdo, string $username, string $password): int {
+    $sql = "SELECT COUNT(*) FROM user WHERE name = :username";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':username' => $username]);
+    $userCount = $stmt->fetchColumn();
+
+    if ($userCount > 0) {
+        return -1;
+    }
+
     $hash = password_hash($password, PASSWORD_DEFAULT);
 
     $sql = "INSERT INTO user (name, password) VALUES (:name, :password)";
@@ -69,10 +81,10 @@ function addUser(PDO $pdo, string $username, string $password): bool {
             ':password' => $hash,
         ]);
 
-        return true;
+        return (int) $pdo->lastInsertId();
     } catch (PDOException $e) {
         echo $e->getMessage();
-        return false;
+        return -2;
     }
 }
 
@@ -81,8 +93,8 @@ function createDbIfNotExists(){
     $createTableUser = "CREATE TABLE IF NOT EXISTS `user` 
     (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(25)  NOT NULL,
-    `password` VARCHAR(40)  NOT NULL,
+    `name` VARCHAR(127)  NOT NULL,
+    `password` VARCHAR(255)  NOT NULL,
     PRIMARY KEY (`id`)
     )";
 

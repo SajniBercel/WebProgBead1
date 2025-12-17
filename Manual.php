@@ -1,3 +1,8 @@
+<?php
+    include_once("config.php");
+    include_once("auth.php");
+?>
+
 <!doctype html>
 <html lang="hu">
 <head>
@@ -30,7 +35,8 @@
             viszont a legrövidebb elérési útnál ott a játékosnak kell manuálisan új játékot indítani (mivel így addig tudja nézegetni az utat ameddig ő szeretné)
         </p>
         <div style="text-align: center; margin-top: 40px;">
-            <a href="GamePage.html" class="button">Játék indítása</a>
+            <a href="GamePage.php" class="button">Játék indítása</a>
+            <a href="logout.php" class="button">Kijelentkezés</a>
         </div>
     </section>
 </body>

@@ -1,10 +1,10 @@
 <?php
-session_start();
+include_once("config.php");
 
-if (!isset($_SESSION['user_id'])) {
-    header('Location: loginPage.php');
-    exit;
-} else {
-    header('Location: Manual.html');
+if (empty($_SESSION['userID'])) {
+    header('Location: loginPage.html');
     exit;
 }
+
+header('Location: Manual.php');
+exit;

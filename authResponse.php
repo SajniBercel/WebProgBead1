@@ -9,15 +9,19 @@
 </head>
 <body>
 <?php
-    if(isset($error) && strlen($error) > 1){
+include_once('config.php');
+
+    if(!empty($_SESSION["errorList"])){
         echo '<div class="error">';
-        echo $error;
+        echo $_SESSION["errorList"];
         echo '</div>';
     } else {
         echo '<div class="siker">';
-        echo 'Sikeres művelet <a href="index.php">vissza a főoldalhoz</a>>';
+        echo 'Sikeres művelet. <a href="index.php">vissza a főoldalhoz</a>';
         echo '</div>';
     }
+
+    $_SESSION["errorList"] = "";
 ?>
 </body>
 </html>

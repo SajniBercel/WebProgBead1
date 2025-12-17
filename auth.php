@@ -1,7 +1,7 @@
 <?php
-session_start();
+include_once("config.php");
 
-if (empty($_SESSION['user_id'])) {
-    header('Location: /loginPage.php');
+if (empty($_SESSION['userID'])) {
+    header('Location: loginPage.html');
     exit;
 }

@@ -1,3 +1,6 @@
+<?php
+include_once("auth.php");
+?>
 <!doctype html>
 <html lang="hu">
 <head>
